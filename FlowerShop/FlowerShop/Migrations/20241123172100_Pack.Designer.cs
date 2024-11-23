@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcFlowers.Data;
 
@@ -11,9 +12,11 @@ using MvcFlowers.Data;
 namespace FlowerShop.Migrations
 {
     [DbContext(typeof(MvcFlowersContext))]
-    partial class MvcFlowersContextModelSnapshot : ModelSnapshot
+    [Migration("20241123172100_Pack")]
+    partial class Pack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +52,6 @@ namespace FlowerShop.Migrations
 
                     b.Property<string>("Colour")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

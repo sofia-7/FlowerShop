@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcFlowers.Data;
 
@@ -11,9 +12,11 @@ using MvcFlowers.Data;
 namespace FlowerShop.Migrations
 {
     [DbContext(typeof(MvcFlowersContext))]
-    partial class MvcFlowersContextModelSnapshot : ModelSnapshot
+    [Migration("20241123160658_PackDto")]
+    partial class PackDto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,11 +50,8 @@ namespace FlowerShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FlowerId"));
 
-                    b.Property<string>("Colour")
+                    b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -91,22 +91,11 @@ namespace FlowerShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<int>("FlowerId")
                         .HasColumnType("int");
-
-                    b.Property<string>("FlowerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("RecievementDate")
                         .HasColumnType("datetime2");

@@ -15,6 +15,14 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\HomeController.cs" />
+    <Compile Remove="Migrations\20241123164957_Pack.cs" />
+    <Compile Remove="Migrations\20241123164957_Pack.Designer.cs" />
+    <Compile Remove="Migrations\20241123171250_Pack1.cs" />
+    <Compile Remove="Migrations\20241123171250_Pack1.Designer.cs" />
+    <Compile Remove="Migrations\20241123171920_Pack11.cs" />
+    <Compile Remove="Migrations\20241123171920_Pack11.Designer.cs" />
+    <Compile Remove="Migrations\20241123174334_Pack1.cs" />
+    <Compile Remove="Migrations\20241123174334_Pack1.Designer.cs" />
     <Compile Remove="Models\ErrorViewModel.cs" />
   </ItemGroup>
 

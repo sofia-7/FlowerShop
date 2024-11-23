@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcFlowers.Data;
 
@@ -11,9 +12,11 @@ using MvcFlowers.Data;
 namespace FlowerShop.Migrations
 {
     [DbContext(typeof(MvcFlowersContext))]
-    partial class MvcFlowersContextModelSnapshot : ModelSnapshot
+    [Migration("20241123174334_Pack1")]
+    partial class Pack1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,12 +53,12 @@ namespace FlowerShop.Migrations
                     b.Property<string>("Colour")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PackId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -85,11 +88,11 @@ namespace FlowerShop.Migrations
 
             modelBuilder.Entity("MvcFlowers.Models.Pack", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PackId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackId"));
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -111,7 +114,7 @@ namespace FlowerShop.Migrations
                     b.Property<DateTime>("RecievementDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("PackId");
 
                     b.HasIndex("FlowerId");
 

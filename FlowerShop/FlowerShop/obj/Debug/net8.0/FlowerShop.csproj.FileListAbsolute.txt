@@ -162,3 +162,4 @@ C:\Рабочий стол\4\кросс-платформенная разраб�
 C:\Рабочий стол\4\кросс-платформенная разработка\FlowerShop\FlowerShop\FlowerShop\FlowerShop\obj\Debug\net8.0\FlowerShop.pdb
 C:\Рабочий стол\4\кросс-платформенная разработка\FlowerShop\FlowerShop\FlowerShop\FlowerShop\obj\Debug\net8.0\FlowerShop.genruntimeconfig.cache
 C:\Рабочий стол\4\кросс-платформенная разработка\FlowerShop\FlowerShop\FlowerShop\FlowerShop\obj\Debug\net8.0\ref\FlowerShop.dll
+C:\Рабочий стол\4\кросс-платформенная разработка\FlowerShop\FlowerShop\FlowerShop\FlowerShop\obj\Debug\net8.0\FlowerShop.sourcelink.json
