@@ -11,6 +11,7 @@ namespace MvcFlowers.Models
         [ForeignKey("FlowerId")]
         public Flower Flower { get; set; }
         public int Count { get; set; }
+
         //public Bouqet Bouqet { get; set; }
     }
 }

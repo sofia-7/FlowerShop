@@ -30,19 +30,22 @@ namespace MvcFlowers.Controllers
 
         // GET: api/Bouqet/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bouqet>> GetBouquet(int id)
+        public async Task<IActionResult> GetBouquet(int id)
         {
-            var bouqet = await _context.Bouqet
-                .Include(b => b.Flowers)
-                .FirstOrDefaultAsync(m => m.BouqetId == id);
+            var bouquet = await _context.Bouqet
+                .Include(b => b.Flowers) // Загрузите связанные данные
+                    .ThenInclude(fb => fb.Flower) // Загрузите цветы в букете
+                .FirstOrDefaultAsync(b => b.BouqetId == id);
 
-            if (bouqet == null)
+            if (bouquet == null)
             {
                 return NotFound();
             }
 
-            return Ok(bouqet);
+            // Возвращаем данные букета, включая цветы
+            return Ok(bouquet);
         }
+
 
         // POST: api/Bouqet
         [HttpPost]
@@ -54,6 +57,9 @@ namespace MvcFlowers.Controllers
                 {
                     // Создаем букет с помощью метода менеджера
                     var newBouquet = await Manager.CreateBouquet(_context, selectedFlowers);
+
+                    // Устанавливаем значение SelectedFlowerIds
+                    newBouquet.SelectedFlowerIds = string.Join(",", selectedFlowers.Select(sf => sf.FlowerId));
 
                     // Добавляем букет в контекст и сохраняем изменения
                     _context.Bouqet.Add(newBouquet);
@@ -69,6 +75,8 @@ namespace MvcFlowers.Controllers
 
             return BadRequest(ModelState);
         }
+
+
 
         // PUT: api/Bouqet/5
         [HttpPut("{id}")]

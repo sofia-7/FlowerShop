@@ -20,6 +20,7 @@ namespace MvcFlowers.Models
         }
         
         public string DisplayName => $"{Name} ({Colour})";
+
     
     // Метод для подсчета свежести цветка
     public int CalculateFreshness()

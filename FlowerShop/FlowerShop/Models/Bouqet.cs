@@ -10,10 +10,31 @@ namespace MvcFlowers.Models
         public List<FlowerInBouqet> Flowers { get; set; } = new List<FlowerInBouqet>();
 
         //[NotMapped]
-        public decimal TotalPrice => Flowers.Sum(f => f.Flower.PriceAsInt * f.Count);
+        public decimal TotalPrice
+        {
+            get
+            {
+                // Проверяем, есть ли цветы в букете
+                if (Flowers == null || !Flowers.Any())
+                {
+                    return 0; // Если нет цветов, цена 0
+                }
+
+                // Суммируем цену всех цветов в букете
+                return Flowers.Sum(f =>
+                {
+                    // Проверяем, что Flower не равен null
+                    if (f.Flower != null)
+                    {
+                        return f.Flower.Price * f.Count; // Предполагаем, что есть свойство Quantity
+                    }
+                    return 0; // Если Flower равен null, добавляем 0
+                });
+            }
+        }
         [NotMapped]
         public int FlowersCount => Flowers.Sum(fl => fl.Count);
-        public string SelectedFlowerIds { get; set; }
+        public string? SelectedFlowerIds { get; set; }
 
         public Bouqet()
         {
