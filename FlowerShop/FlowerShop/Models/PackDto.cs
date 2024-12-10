@@ -17,3 +17,12 @@ public class PackCreateDto
     public string Color { get; set; }
     public decimal Price { get; set; }
 }
+
+public class FlowerDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Colour { get; set; }
+    public decimal Price { get; set; }
+    public List<PackDto> Packs { get; set; } // Добавляем свойство для партий
+}

@@ -25,9 +25,6 @@ namespace MvcFlowers.Controllers
         public async Task<ActionResult<IEnumerable<Bouqet>>> GetBouquets()
         {
             var bouquets = await _context.Bouqet.Include(b => b.Flowers).ToListAsync();
-
-       
-
             return Ok(bouquets);
         }
 
@@ -49,20 +46,20 @@ namespace MvcFlowers.Controllers
 
         // POST: api/Bouqet
         [HttpPost]
-        public async Task<ActionResult<Bouqet>> CreateBouquet([FromBody] Bouqet bouqet)
+        public async Task<ActionResult<Bouqet>> CreateBouquet([FromBody] List<FlowerSelection> selectedFlowers)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Создаем букет с помощью метода модели
-                    var newBouquet = new Bouqet();
+                    // Создаем букет с помощью метода менеджера
+                    var newBouquet = await Manager.CreateBouquet(_context, selectedFlowers);
 
                     // Добавляем букет в контекст и сохраняем изменения
-                    //_context.Bouqet.Add(newBouquet);
-                    //await _context.SaveChangesAsync();
+                    _context.Bouqet.Add(newBouquet);
+                    await _context.SaveChangesAsync();
 
-                    return Ok();// CreatedAtAction(nameof(GetBouquet), new { id = newBouquet.BouqetId }, newBouquet);
+                    return CreatedAtAction(nameof(GetBouquet), new { id = newBouquet.BouqetId }, newBouquet);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -86,20 +83,12 @@ namespace MvcFlowers.Controllers
             {
                 try
                 {
-                    // Преобразуем выбранные идентификаторы цветов в список целых чисел
-                    var selectedFlowerIds = bouqet.SelectedFlowerIds
-                        .Split(',')
-                        .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
-                        .Where(id => id.HasValue)
-                        .Select(id => id.Value)
-                        .ToList();
-
-                    // Обновляем букет с помощью метода модели
-                   // var updatedBouquet = await Bouqet.EditBouquet(_context, bouqet, selectedFlowerIds);
+                    // Обновляем букет с помощью метода менеджера
+                    var updatedBouquet = await Manager.EditBouquet(_context, bouqet, bouqet.Flowers.Select(f => new FlowerSelection { FlowerId = f.FlowerId, Count = f.Count }).ToList());
 
                     // Обновление букета в контексте
-                   // _context.Update(updatedBouquet);
-                    //await _context.SaveChangesAsync();
+                    _context.Update(updatedBouquet);
+                    await _context.SaveChangesAsync();
 
                     return NoContent();
                 }
@@ -125,7 +114,7 @@ namespace MvcFlowers.Controllers
         {
             try
             {
-               // await Bouqet.DeleteBouquet(_context, id);
+                await Manager.DeleteBouquet(_context, id);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

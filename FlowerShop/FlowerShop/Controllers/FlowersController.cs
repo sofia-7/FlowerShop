@@ -22,24 +22,40 @@ namespace MvcFlowers.Controllers
 
         // GET: api/MonoFlowers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Flower>>> GetMonoFlowers()
+        public async Task<ActionResult<IEnumerable<Flower>>> GetMonoFlower()
         {
             return Ok(await _context.Flowers.ToListAsync());
         }
 
-        // GET: api/MonoFlowers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Flower>> GetMonoFlower(int id)
+        public async Task<ActionResult<FlowerDto>> GetFlower(int id)
         {
-            var monoFlowers = await _context.Flowers.FindAsync(id);
+            var flower = await _context.Flowers
+                .Include(f => f.Packs) // Включаем связанные партии
+                .FirstOrDefaultAsync(f => f.FlowerId == id);
 
-            if (monoFlowers == null)
+            if (flower == null)
             {
                 return NotFound();
             }
 
-            return Ok(monoFlowers);
+            var flowerDto = new FlowerDto
+            {
+                Id = flower.FlowerId,
+                Name = flower.Name,
+                Colour = flower.Colour,
+                Price = flower.Price,
+                Packs = flower.Packs.Select(p => new PackDto
+                {
+                    Id = p.Id,
+                    RecievementDate = p.RecievementDate,
+                    Count = p.Count
+                }).ToList() // Преобразуем партии в DTO
+            };
+
+            return Ok(flowerDto);
         }
+
 
         // POST: api/MonoFlowers
         [HttpPost]

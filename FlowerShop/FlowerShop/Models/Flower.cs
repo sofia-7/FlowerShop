@@ -10,7 +10,7 @@ namespace MvcFlowers.Models
         public decimal Price { get; set; }
         public string? Colour { get; set; }
         public int Id { get; set; }
-        public List<Pack> Packs { get; set; }
+        public List<Pack>? Packs { get; set; }
 
         [NotMapped] 
         public int PriceAsInt
@@ -39,4 +39,6 @@ namespace MvcFlowers.Models
             return (days != -1) && days < 7; // Свежий, если меньше 7 дней
         }
     }
+
+
 }

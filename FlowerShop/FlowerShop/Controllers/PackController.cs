@@ -61,7 +61,6 @@ namespace MvcFlowers.Controllers
         }
 
 
-        // POST: api/packs
         [HttpPost]
         public async Task<ActionResult<PackDto>> CreatePack(PackCreateDto packCreateDto)
         {
@@ -69,32 +68,36 @@ namespace MvcFlowers.Controllers
 
             try
             {
-                if (packCreateDto.FlowerId.HasValue) // Проверяем, указано ли FlowerId
-                {
-                    var flower = await _context.Flowers.FindAsync(packCreateDto.FlowerId.Value);
-                    if (flower == null)
-                    {
-                        return NotFound("Цветок не найден.");
-                    }
+                // Проверяем, существует ли цветок с таким же именем и цветом
+                var existingFlower = await _context.Flowers
+                    .Include(f => f.Packs) // Включаем связанные пакеты
+                    .FirstOrDefaultAsync(f => f.Name == packCreateDto.FlowerName && f.Colour == packCreateDto.Color);
 
+                if (existingFlower != null)
+                {
+                    // Если цветок существует, создаем новую партию
                     pack = new Pack
                     {
-                        FlowerId = packCreateDto.FlowerId.Value,
+                        FlowerId = existingFlower.FlowerId,
                         RecievementDate = packCreateDto.RecievementDate,
                         Count = packCreateDto.Count,
-                        Color = packCreateDto.Color,
+                        Color = existingFlower.Colour,
                         Price = packCreateDto.Price,
-                        FlowerName = flower.Name,
+                        FlowerName = existingFlower.Name,
                     };
+
+                    // Добавляем новую партию в коллекцию Packs цветка
+                    existingFlower.Packs.Add(pack);
                 }
                 else
                 {
-                    // Логика для создания нового цветка
+                    // Если цветка нет, создаем новый цветок
                     var newFlower = new Flower
                     {
                         Name = packCreateDto.FlowerName,
                         Price = packCreateDto.Price,
                         Colour = packCreateDto.Color,
+                        Packs = new List<Pack>() // Инициализируем коллекцию
                     };
 
                     _context.Flowers.Add(newFlower);
@@ -105,12 +108,16 @@ namespace MvcFlowers.Controllers
                         FlowerId = newFlower.FlowerId,
                         RecievementDate = packCreateDto.RecievementDate,
                         Count = packCreateDto.Count,
-                        Color = packCreateDto.Color,
+                        Color = newFlower.Colour,
                         Price = packCreateDto.Price,
                         FlowerName = newFlower.Name,
                     };
+
+                    // Добавляем новую партию в коллекцию Packs нового цветка
+                    newFlower.Packs.Add(pack);
                 }
 
+                // Добавляем партию в контекст
                 _context.Packs.Add(pack);
                 await _context.SaveChangesAsync();
 
@@ -129,6 +136,7 @@ namespace MvcFlowers.Controllers
                 return BadRequest($"Ошибка при создании упаковки: {ex.Message}");
             }
         }
+
 
 
 
